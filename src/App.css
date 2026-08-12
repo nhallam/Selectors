@@ -1,0 +1,368 @@
+:root {
+  --cream: #f8e7c9;
+  --cream-deep: #f3d9a8;
+  --ink: #2b2118;
+  --orange: #f2a44e;
+  --orange-deep: #e88f2e;
+  --blue: #86cdea;
+  --blue-deep: #5fb8de;
+  --coral: #ef6a55;
+  --coral-deep: #e5503a;
+  --card: #fdf3dd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Avenir Next', 'Futura', 'Segoe UI', system-ui, sans-serif;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+/* ── Header ─────────────────────────────── */
+.header h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+}
+
+.logo {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--coral-deep);
+}
+
+.dates {
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+}
+
+.tagline {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  max-width: 46rem;
+}
+
+/* ── Day tabs ───────────────────────────── */
+.day-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin: 1.25rem 0 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.day-tab {
+  position: relative;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.55rem 1rem 0.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.day-tab.active {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.day-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.day-date {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.day-count {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.35rem;
+  min-width: 1.3rem;
+  height: 1.3rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: var(--coral-deep);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+/* ── Layout ─────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 820px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .plan {
+    order: -1;
+  }
+}
+
+/* ── Lineup ─────────────────────────────── */
+.stage-block {
+  margin-bottom: 1.4rem;
+}
+
+.stage-name {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.55rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  max-width: 100%;
+  transition: transform 0.06s ease;
+}
+
+.act:active {
+  transform: scale(0.97);
+}
+
+.kind-stage {
+  background: var(--orange);
+}
+.kind-boat {
+  background: var(--blue);
+}
+.kind-barberellas {
+  background: var(--coral);
+  color: #fff;
+}
+
+.act.picked {
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.act-time {
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.act-name {
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.act-detail {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* ── Plan ───────────────────────────────── */
+.plan {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 1rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.plan-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.plan-date {
+  font-weight: 600;
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+.plan-empty {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.plan-summary {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.summary-item {
+  flex: 1;
+  background: var(--cream-deep);
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.summary-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}
+
+.summary-value {
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.timeline-act {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.55rem 0.6rem;
+  border-radius: 8px;
+  border-left: 5px solid var(--orange-deep);
+  background: #fff8ea;
+}
+
+.timeline-act.kind-boat {
+  border-left-color: var(--blue-deep);
+}
+
+.timeline-act.kind-barberellas {
+  border-left-color: var(--coral-deep);
+}
+
+.timeline-act.clashing {
+  background: #fde7e2;
+  outline: 2px dashed var(--coral-deep);
+  outline-offset: -2px;
+}
+
+.tl-time {
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  padding-top: 0.1rem;
+}
+
+.tl-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.tl-name {
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.tl-stage {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}
+
+.tl-detail {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.tl-clash {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--coral-deep);
+}
+
+.tl-remove {
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  opacity: 0.45;
+  padding: 0.1rem 0.2rem;
+}
+
+.tl-remove:hover {
+  opacity: 1;
+}
+
+.timeline-gap {
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem;
+  border: 2px dashed rgba(43, 33, 24, 0.3);
+  border-radius: 8px;
+}
+
+.gap-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
