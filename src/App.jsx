@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ACTS, DAYS, STAGE_ORDER } from './data/lineup.js'
 import { buildDayPlan, formatDuration, toHHMM, MINOR_CLASH } from './lib/plan.js'
+import { savePlanImage } from './lib/planImage.js'
 import './App.css'
 
 const STORAGE_KEY = 'selectors10-picks'
@@ -237,6 +238,13 @@ export default function App() {
                   )
                 )}
               </ol>
+
+              <button
+                className="save-image"
+                onClick={() => savePlanImage({ day, plan, actCount: selectedDayActs.length })}
+              >
+                Save day as image
+              </button>
             </>
           )}
         </aside>
