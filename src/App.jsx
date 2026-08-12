@@ -14,9 +14,105 @@ function loadPicks() {
   }
 }
 
+function TimelineAct({ item, isFlipped, onFlip, onRemove }) {
+  const { act, clashesWith } = item
+  const hasClash = clashesWith.length > 0
+  const severity = hasClash
+    ? clashesWith.some((c) => c.duration > MINOR_CLASH)
+      ? 'major'
+      : 'minor'
+    : null
+
+  const front = (
+    <>
+      <span className="tl-time">
+        {act.start}–{act.end}
+        {hasClash && (
+          <span className={`tl-warn ${severity}`} aria-hidden="true">
+            ⚠
+          </span>
+        )}
+      </span>
+      <span className="tl-body">
+        <span className="tl-name">{act.name}</span>
+        <span className="tl-stage">{act.stage}</span>
+        {act.detail && <span className="tl-detail">{act.detail}</span>}
+      </span>
+      <button
+        className="tl-remove"
+        onClick={(e) => {
+          e.stopPropagation()
+          onRemove()
+        }}
+        aria-label={`Remove ${act.name}`}
+        title="Remove from plan"
+      >
+        ×
+      </button>
+    </>
+  )
+
+  if (!hasClash) {
+    return <li className={`timeline-act kind-${act.kind}`}>{front}</li>
+  }
+
+  return (
+    <li
+      className={`timeline-act flip-card kind-${act.kind} clash-${severity} ${
+        isFlipped ? 'flipped' : ''
+      }`}
+    >
+      <div
+        className="flip-inner"
+        role="button"
+        tabIndex={0}
+        aria-expanded={isFlipped}
+        aria-label={`${act.name} overlaps ${clashesWith.length} of your picks — press to see details`}
+        onClick={onFlip}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onFlip()
+          }
+        }}
+      >
+        <div className="flip-face flip-front">{front}</div>
+        <div className="flip-face flip-back">
+          <span className="tl-time">
+            {act.start}–{act.end}
+          </span>
+          <span className="tl-body">
+            <span className="back-title">{act.name} overlaps</span>
+            {clashesWith.map((clash) => (
+              <span
+                key={clash.name}
+                className={`tl-clash ${clash.duration > MINOR_CLASH ? '' : 'minor'}`}
+              >
+                {clash.name} — {formatDuration(clash.duration)} ({toHHMM(clash.start)}–
+                {toHHMM(clash.end)})
+              </span>
+            ))}
+            <span className="back-hint">tap to flip back</span>
+          </span>
+        </div>
+      </div>
+    </li>
+  )
+}
+
 export default function App() {
   const [dayId, setDayId] = useState(DAYS[0].id)
   const [picks, setPicks] = useState(loadPicks)
+  const [flipped, setFlipped] = useState(() => new Set())
+
+  const toggleFlip = (id) => {
+    setFlipped((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...picks]))
@@ -131,42 +227,13 @@ export default function App() {
                       </span>
                     </li>
                   ) : (
-                    <li
+                    <TimelineAct
                       key={item.act.id}
-                      className={`timeline-act kind-${item.act.kind} ${
-                        item.clashesWith.length > 0
-                          ? item.clashesWith.some((c) => c.duration > MINOR_CLASH)
-                            ? 'clashing'
-                            : 'clashing clash-minor'
-                          : ''
-                      }`}
-                    >
-                      <span className="tl-time">
-                        {item.act.start}–{item.act.end}
-                      </span>
-                      <span className="tl-body">
-                        <span className="tl-name">{item.act.name}</span>
-                        <span className="tl-stage">{item.act.stage}</span>
-                        {item.act.detail && <span className="tl-detail">{item.act.detail}</span>}
-                        {item.clashesWith.map((clash) => (
-                          <span
-                            key={clash.name}
-                            className={`tl-clash ${clash.duration > MINOR_CLASH ? '' : 'minor'}`}
-                          >
-                            ⚠ {formatDuration(clash.duration)} overlap with {clash.name} (
-                            {toHHMM(clash.start)}–{toHHMM(clash.end)})
-                          </span>
-                        ))}
-                      </span>
-                      <button
-                        className="tl-remove"
-                        onClick={() => togglePick(item.act.id)}
-                        aria-label={`Remove ${item.act.name}`}
-                        title="Remove from plan"
-                      >
-                        ×
-                      </button>
-                    </li>
+                      item={item}
+                      isFlipped={flipped.has(item.act.id)}
+                      onFlip={() => toggleFlip(item.act.id)}
+                      onRemove={() => togglePick(item.act.id)}
+                    />
                   )
                 )}
               </ol>
