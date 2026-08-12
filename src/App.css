@@ -344,7 +344,14 @@ body {
   cursor: pointer;
   color: var(--ink);
   opacity: 0.45;
-  padding: 0.1rem 0.2rem;
+  /* 40px touch target that bleeds into the card padding instead of growing the row */
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  margin: -0.55rem -0.6rem -0.55rem -0.35rem;
 }
 
 .tl-remove:hover {
