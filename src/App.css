@@ -300,6 +300,12 @@ body {
   outline-offset: -2px;
 }
 
+/* overlaps of 45 min or less: a softer warning than a full clash */
+.timeline-act.clash-minor {
+  background: #fbf0d8;
+  outline-color: #cf8a1d;
+}
+
 .tl-time {
   font-size: 0.78rem;
   font-weight: 800;
@@ -336,6 +342,10 @@ body {
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--coral-deep);
+}
+
+.tl-clash.minor {
+  color: #a86b0e;
 }
 
 .tl-remove {

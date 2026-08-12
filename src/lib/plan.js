@@ -10,6 +10,11 @@ export function toMinutes(hhmm) {
   return mins < NOON ? mins + 24 * 60 : mins
 }
 
+export function toHHMM(mins) {
+  const m = mins % (24 * 60)
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+}
+
 export function formatDuration(mins) {
   const h = Math.floor(mins / 60)
   const m = mins % 60
@@ -20,9 +25,13 @@ export function formatDuration(mins) {
 
 const MIN_GAP = 30
 
+// Overlaps of this length or shorter count as a minor clash
+export const MINOR_CLASH = 45
+
 // Given the selected acts for one day, returns:
 // { arrive, finish, items } where items is a chronological list of
-// { type: 'act', act, clashesWith: [names] } and { type: 'gap', start, end, duration }
+// { type: 'act', act, clashesWith: [{ name, start, end, duration }] }
+// and { type: 'gap', start, end, duration }
 export function buildDayPlan(selectedActs) {
   if (selectedActs.length === 0) return null
 
@@ -48,7 +57,16 @@ export function buildDayPlan(selectedActs) {
 
     const clashesWith = acts
       .filter((other) => other !== act && overlaps(act, other))
-      .map((other) => other.name)
+      .map((other) => {
+        const overlapStart = Math.max(start, toMinutes(other.start))
+        const overlapEnd = Math.min(end, toMinutes(other.end))
+        return {
+          name: other.name,
+          start: overlapStart,
+          end: overlapEnd,
+          duration: overlapEnd - overlapStart,
+        }
+      })
 
     items.push({ type: 'act', act, clashesWith })
     coveredUntil = coveredUntil === null ? end : Math.max(coveredUntil, end)

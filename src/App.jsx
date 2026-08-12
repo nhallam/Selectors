@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ACTS, DAYS, STAGE_ORDER } from './data/lineup.js'
-import { buildDayPlan, formatDuration } from './lib/plan.js'
+import { buildDayPlan, formatDuration, toHHMM, MINOR_CLASH } from './lib/plan.js'
 import './App.css'
 
 const STORAGE_KEY = 'selectors10-picks'
@@ -134,7 +134,11 @@ export default function App() {
                     <li
                       key={item.act.id}
                       className={`timeline-act kind-${item.act.kind} ${
-                        item.clashesWith.length > 0 ? 'clashing' : ''
+                        item.clashesWith.length > 0
+                          ? item.clashesWith.some((c) => c.duration > MINOR_CLASH)
+                            ? 'clashing'
+                            : 'clashing clash-minor'
+                          : ''
                       }`}
                     >
                       <span className="tl-time">
@@ -144,11 +148,15 @@ export default function App() {
                         <span className="tl-name">{item.act.name}</span>
                         <span className="tl-stage">{item.act.stage}</span>
                         {item.act.detail && <span className="tl-detail">{item.act.detail}</span>}
-                        {item.clashesWith.length > 0 && (
-                          <span className="tl-clash">
-                            ⚠ Clashes with {item.clashesWith.join(', ')}
+                        {item.clashesWith.map((clash) => (
+                          <span
+                            key={clash.name}
+                            className={`tl-clash ${clash.duration > MINOR_CLASH ? '' : 'minor'}`}
+                          >
+                            ⚠ {formatDuration(clash.duration)} overlap with {clash.name} (
+                            {toHHMM(clash.start)}–{toHHMM(clash.end)})
                           </span>
-                        )}
+                        ))}
                       </span>
                       <button
                         className="tl-remove"
