@@ -235,6 +235,17 @@ export async function savePlanImage({ day, plan, actCount }) {
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
   const filename = `selectors10-${day.label.toLowerCase()}.png`
 
+  // Inside the claude.ai artifact viewer, saves must go through the viewer's
+  // confirmation prompt — direct downloads and the share sheet are sandboxed away.
+  if (window.claude?.downloads?.save) {
+    try {
+      await window.claude.downloads.save({ filename, data: blob })
+    } catch {
+      // declined or unavailable; nothing else can save a file in this sandbox
+    }
+    return
+  }
+
   // On phones, the share sheet lets people save straight to their photos.
   const file = new File([blob], filename, { type: 'image/png' })
   if (navigator.canShare?.({ files: [file] })) {
