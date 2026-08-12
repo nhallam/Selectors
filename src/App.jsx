@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { ACTS, DAYS, STAGE_ORDER } from './data/lineup.js'
 import { buildDayPlan, formatDuration, toHHMM, MINOR_CLASH } from './lib/plan.js'
 import { savePlanImage } from './lib/planImage.js'
@@ -249,6 +250,15 @@ export default function App() {
           )}
         </aside>
       </main>
+
+      <footer className="site-footer">
+        Made by{' '}
+        <a href="https://www.instagram.com/nhallam" target="_blank" rel="noopener noreferrer">
+          Nick
+        </a>
+      </footer>
+
+      <Analytics />
     </div>
   )
 }
