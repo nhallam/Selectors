@@ -176,15 +176,15 @@ body {
   transform: scale(0.97);
 }
 
-.kind-stage {
+/* scoped to the lineup buttons so these don't bleed into the plan cards */
+.act.kind-stage {
   background: var(--orange);
 }
-.kind-boat {
+.act.kind-boat {
   background: var(--blue);
 }
-.kind-barberellas {
+.act.kind-barberellas {
   background: var(--coral);
-  color: #fff;
 }
 
 .act.picked {
