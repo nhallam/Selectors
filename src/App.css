@@ -294,16 +294,94 @@ body {
   border-left-color: var(--coral-deep);
 }
 
-.timeline-act.clashing {
+/* ── Clash flip cards ───────────────────── */
+/* The li becomes a 3D stage; front/back faces carry the card styling. */
+.timeline-act.flip-card {
+  padding: 0;
+  background: none;
+  border-left: none;
+  display: block;
+  perspective: 800px;
+}
+
+.flip-inner {
+  display: grid;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+  border-radius: 8px;
+}
+
+.flip-card.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+.flip-inner:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.flip-face {
+  grid-area: 1 / 1;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.55rem 0.6rem;
+  border-radius: 8px;
+  border-left: 5px solid var(--orange-deep);
+  backface-visibility: hidden;
+}
+
+.flip-card.kind-boat .flip-face {
+  border-left-color: var(--blue-deep);
+}
+
+.flip-card.kind-barberellas .flip-face {
+  border-left-color: var(--coral-deep);
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+.flip-card.clash-major .flip-face {
   background: #fde7e2;
   outline: 2px dashed var(--coral-deep);
   outline-offset: -2px;
 }
 
 /* overlaps of 45 min or less: a softer warning than a full clash */
-.timeline-act.clash-minor {
+.flip-card.clash-minor .flip-face {
   background: #fbf0d8;
-  outline-color: #cf8a1d;
+  outline: 2px dashed #cf8a1d;
+  outline-offset: -2px;
+}
+
+.tl-warn {
+  display: inline-block;
+  margin-left: 0.35rem;
+  color: var(--coral-deep);
+}
+
+.tl-warn.minor {
+  color: #a86b0e;
+}
+
+.back-title {
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.back-hint {
+  font-size: 0.68rem;
+  font-style: italic;
+  opacity: 0.55;
 }
 
 .tl-time {
